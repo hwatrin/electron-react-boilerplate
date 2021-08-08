@@ -1,51 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect, Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import icon from '../assets/icon.svg';
-import './App.global.css';
+import Page from './shared/components/Page';
+import getStore from './shared/redux';
+import { addPageRedux, blankPage } from './shared/redux/pages';
+import { setCurrentPageRedux } from './shared/redux/config';
+import { addOrEditBlockRedux } from './shared/redux/blocks';
 
-const Hello = () => {
+const { store } = getStore();
+
+interface Props {
+  currentPage: string;
+  addBlock: ({ payload }: { payload: Block }) => any;
+  addPage: ({ payload }: { payload: Page }) => any;
+  setCurrentPage: ({ payload }: { payload: string }) => any;
+}
+
+let Index = ({ currentPage, setCurrentPage, addBlock, addPage }: Props) => {
+  useEffect(() => {
+    if (currentPage === 'none') {
+      const { page, block } = blankPage();
+      addPage({ payload: page });
+      addBlock({ payload: block });
+      setCurrentPage({ payload: page._id });
+    }
+  });
+
+  if (currentPage === 'none') {
+    return <></>;
+  }
+
   return (
     <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+      <Page page_id={currentPage} />
     </div>
   );
 };
 
+const mapStateToProps = (state: ReduxState) => ({
+  currentPage: state.config.currentPage,
+});
+
+const mapDispatchToProps = {
+  addPage: addPageRedux,
+  addBlock: addOrEditBlockRedux,
+  setCurrentPage: setCurrentPageRedux,
+};
+
 export default function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" component={Hello} />
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route
+            path="/"
+            component={connect(mapStateToProps, mapDispatchToProps)(Index)}
+          />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
