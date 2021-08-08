@@ -1,0 +1,5 @@
+.line {
+  outline: none;
+  border-color: 'blue';
+  border-width: 0;
+}
