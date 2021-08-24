@@ -22,7 +22,7 @@ const Line = ({
   editBlock,
   deleteBlockReference,
 }: Props) => {
-  const { selectLine, addLine, forceUpdate } = pageInteractors;
+  const { selectLine, addLine, forceUpdate, setAdderShowing } = pageInteractors;
   const { selectedLine, index } = pageData;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -62,16 +62,21 @@ const Line = ({
             }
           }
           addLine(index + 1, newLineText);
-        }
-        if (e.key === 'ArrowUp') selectLine(index - 1);
-        if (e.key === 'ArrowDown') selectLine(index + 1);
-        if (e.key === 'Backspace' && block.text.length === 0 && index !== 0) {
+        } else if (e.key === 'ArrowUp') selectLine(index - 1);
+        else if (e.key === 'ArrowDown') selectLine(index + 1);
+        else if (
+          e.key === 'Backspace' &&
+          block.text.length === 0 &&
+          index !== 0
+        ) {
           deleteBlockReference({
             payload: pageData.index,
             page_id: pageData._id,
           });
           deleteBlock({ payload: block });
           selectLine(index - 1);
+        } else if (e.key === '/') {
+          setAdderShowing(true);
         }
       }}
       onChange={(e) => editText(e.target.value)}

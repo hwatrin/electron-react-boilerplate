@@ -6,9 +6,11 @@ interface PageInteractors {
   addLine: (index: number, text?: string) => any;
   selectLine: (line: number, move?: boolean) => any;
   forceUpdate: () => any;
+  setAdderShowing: (b: boolean) => any;
 }
 interface PageData {
   index: number;
   selectedLine: SelectedLine;
   _id: string;
+  adderShowing: boolean;
 }

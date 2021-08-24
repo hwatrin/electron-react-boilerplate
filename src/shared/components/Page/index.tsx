@@ -6,6 +6,7 @@ import {
   addBlockReferenceRedux,
   BlockReferenceParams,
 } from '../../redux/pages';
+import Adder from './Adder';
 import Block from './Block';
 import styles from './styles.module.css';
 
@@ -37,6 +38,7 @@ const Page = ({
     pos: number;
     move: boolean;
   }>({ pos: 0, move: false });
+  const [adderShowing, setAdderShowing] = useState<boolean>(false);
 
   /**
    * Called when any input hits Enter key. This will add a new line and
@@ -61,7 +63,7 @@ const Page = ({
    * @param line number
    */
   const selectLine = (pos: number, move = false) => {
-    if (pos >= 0 && pos < page.blocks.length) {
+    if (pos >= 0 && pos < page.blocks.length) {azsd db89;n'   m0
       setSelectedLine({ pos, move });
     }
   };
@@ -72,8 +74,13 @@ const Page = ({
         const block: Block = blocks[b];
         return (
           <Block
-            pageInteractors={{ addLine, selectLine, forceUpdate }}
-            pageData={{ selectedLine, index, _id: page._id }}
+            pageInteractors={{
+              addLine,
+              selectLine,
+              forceUpdate,
+              setAdderShowing,
+            }}
+            pageData={{ selectedLine, index, _id: page._id, adderShowing }}
             key={index}
             block={block}
           />

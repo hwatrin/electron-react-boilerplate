@@ -3,15 +3,18 @@ import { persistStore /*persistReducer*/ } from 'redux-persist';
 import blocks from './blocks';
 import pages from './pages';
 import config from './config';
+import adder from './adder';
 
 // const persistConfig = {
 //   key: 'root',
 //   storage: combineReducers
 // };
+
 const combinedReducer = combineReducers({
   blocks,
   pages,
   config,
+  adder,
 });
 // const persistedReducer = persistReducer(persistConfig, combinedReducer);
 
